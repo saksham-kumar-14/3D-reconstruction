@@ -295,8 +295,21 @@ Q3.3.1 Camera Matrix Estimation
        [O] P, camera matrix (3x4 matrix)
 """
 def estimate_pose(x, X):
-    # replace pass by your implementation
-    pass
+    N = x.shape[0]
+    A = np.zeros((2 * N, 12))
+    
+    for i in range(N):
+        Xx, Xy, Xz = X[i]
+        u, v = x[i]
+        
+        A[2 * i] = [Xx, Xy, Xz, 1, 0, 0, 0, 0, -u * Xx, -u * Xy, -u * Xz, -u]
+        A[2 * i + 1] = [0, 0, 0, 0, Xx, Xy, Xz, 1, -v * Xx, -v * Xy, -v * Xz, -v]
+    
+    # Solve using SVD
+    _, _, Vt = np.linalg.svd(A)
+    P = Vt[-1].reshape(3, 4)  # Last row of Vt reshaped to 3x4
+    
+    return P
 
 
 """
@@ -307,5 +320,23 @@ Q3.3.2 Camera Parameter Estimation
            t, camera extrinsics translation (3x1 matrix)
 """
 def estimate_params(P):
-    # replace pass by your implementation
-    pass
+    M = P[:, :3]
+    
+    # Perform RQ decomposition to get K and R
+    K, R = np.linalg.qr(np.linalg.inv(M))
+    K = np.linalg.inv(K)
+    R = np.linalg.inv(R)
+    
+    # Ensure a positive diagonal for K
+    if np.linalg.det(R) < 0:
+        R = -R
+        K = -K
+    
+    # Normalize K such that K[2,2] = 1
+    K /= K[2, 2]
+    
+    # Compute translation vector t
+    t = np.linalg.inv(K) @ P[:, 3]
+    
+    return K, R, t.reshape(-1, 1)
+

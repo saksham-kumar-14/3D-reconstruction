@@ -105,7 +105,7 @@ def scatter_3D_points(points3D):
     plt.show()
 
 
-# scatter_3D_points(best_pts3D)
+scatter_3D_points(best_pts3D)
 
 
 

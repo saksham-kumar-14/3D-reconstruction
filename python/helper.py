@@ -211,9 +211,9 @@ def _imwarp(I, H, bb):
 
 
 def warpStereo(I1, I2, M1, M2):
-    bb = _mcbbox(I1.shape, I2.shape, M1, M2)
+    bb = (_mcbbox(I1.shape, I2.shape, M1, M2))
 
-    I1p = _imwarp(I1, M1, bb)
-    I2p = _imwarp(I2, M2, bb)
+    I1p = _imwarp(I1, M1, tuple(map(int, bb)))
+    I2p = _imwarp(I2, M2, tuple(map(int, bb)))
 
     return I1p, I2p, bb

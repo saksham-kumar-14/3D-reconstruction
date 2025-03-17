@@ -22,6 +22,7 @@ t1, t2 = extrinsics['t1'], extrinsics['t2']
 
 M1, M2, K1p, K2p, R1p, R2p, t1p, t2p = sub.rectify_pair(K1, K2, R1, R2, t1, t2)
 np.savez('../data/rectify.npz', M1=M1, M2=M2, K1p=K1p, K2p=K2p, R1p=R1p, R2p=R2p, t1p=t1p, t2p=t2p)
+# print(M1, M2, K1p, K2p, R1p, R2p, t1p, t2p)
 
 # 3. Warp and display the result
 
@@ -37,6 +38,7 @@ pts1, pts2 = corresp['pts1'][::18].T, corresp['pts2'][::18].T
 pts1, pts2 = hlp._projtrans(M1, pts1), hlp._projtrans(M2, pts2)
 pts2[0,:] = pts2[0,:] + c
 
+print(I.shape)
 plt.imshow(I, cmap='gray')
 plt.scatter(pts1[0,:], pts1[1,:], s=60, c='r', marker='*')
 plt.scatter(pts2[0,:], pts2[1,:], s=60, c='r', marker='*')
