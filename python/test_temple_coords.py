@@ -73,6 +73,7 @@ for P2 in P2s:
 # Print the best projection matrix
 print("Selected Best P2:", best_P2)
 print("Max positive depth count:", max_positive_depth)
+print("Best 3D points : ", best_pts3D)
 
 # 9. Scatter plot the correct 3D points
 
